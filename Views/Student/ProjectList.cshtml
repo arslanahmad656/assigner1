@@ -1,0 +1,147 @@
+﻿@model List<Assigner.Models.CoreEntities.Project>
+
+@{
+    ViewBag.Title = "ProjectList";
+}
+
+<h2>ProjectList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Teacher.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Teacher.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            @Ajax.ActionLink("View Details", "_ProjectDetails", "Project", new { id = @item.ID }, new AjaxOptions
+       {
+           HttpMethod = "GET",
+           UpdateTargetId = "content-project-details",
+           InsertionMode = InsertionMode.Replace,
+           //OnBegin = "viewOnBegin",
+           //OnComplete = "viewOnComplete",
+           OnFailure = "viewOnFailure",
+           OnSuccess = "viewOnSuccess",
+           LoadingElementId = $"details-load-indicator-{item.ID}"
+       })
+
+            <img id=@($"details-load-indicator-{item.ID}") class="img-circle" style="display:none;width:20px;height:20px" src="~/Content/img/progress2.gif" alt="loading..." />
+        </td>
+    </tr>
+}
+
+</table>
+
+<div class="modal fade" id="modal-project-details">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="text-uppercase">PROJECT DETAILS</h4>
+            </div>
+            <div class="modal-body">
+                <div id="content-project-details">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="prepareDelete(this)">
+                    Choose Project
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-projectchoose-success">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="text-primary">You have succesfully chosen a project</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-projectchoose-failure">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="text-danger">Could not choose a project due to some error</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function viewOnFailure() {
+            alert("Request Failed");
+        }
+
+        function viewOnSuccess() {
+            $('#modal-project-details').modal('show');
+        }
+
+        function prepareDelete(btn) {
+        "use strict";
+
+        var img = '<img class="img-circle" style="width:40px;height:40px" src="@(Url.Content("~/Content/img/progress2.gif"))" alt="deleting..." />';
+        var removedBtn = $(btn).replaceWith(img);
+
+        var action = "../StudentChosenProject/CreateProject/" + $("[data-id-project]").attr("data-id-project");
+
+        console.log("action: " + action);
+        $.ajax({
+            url: action,
+            type: "POST"
+        })
+            .always(function (xhr, status) {
+                console.log("Always called");
+                $('#modal-project-details').modal('hide');
+            })
+            .done(function (text) {
+                console.log("Received text: " + text);
+                $('#modal-projectchoose-success').modal('show');
+            })
+            .fail(function (xhr, status, errorThrown) {
+                console.log("Error");
+                console.log("xhr: " + xhr);
+                console.log("status: " + status);
+                console.log("xhr: " + errorThrown);
+                $('#modal-projectchoose-failure').modal('show');
+            })
+    }
+    </script>
+}

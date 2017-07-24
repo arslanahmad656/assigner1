@@ -1,0 +1,185 @@
+﻿@model Assigner.Models.CoreEntities.Student
+
+@{
+    ViewBag.Title = "Profile";
+    var editLinkClass = new { @class = "btn btn-primary btn-wide-medium loader-icon" };
+}
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1>Welcome @Model.Name to your profile</h1>
+    </div>
+    <table class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.ID)</td>
+                <td>@Html.DisplayFor(m => m.ID)</td>
+                <td>@*@Html.ActionLink("Edit", null, null, editLinkClass)*@</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.Name)</td>
+                <td>@Html.DisplayFor(m => m.Name)</td>
+                <td>@Html.ActionLink("Edit", null, null, new { @class = "btn btn-primary btn-wide-medium loader-icon", id = "btn-edit-name" })</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.ApplicationUser.Email)</td>
+                <td>@Html.DisplayFor(m => m.ApplicationUser.Email)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.DateOfBirth)</td>
+                <td>@Html.DisplayFor(m => m.DateOfBirth)</td>
+                <td>@Html.ActionLink("Edit", null, null, new { @class = "btn btn-primary btn-wide-medium loader-icon", id = "btn-edit-dob" })</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.Major)</td>
+                <td>@Html.DisplayFor(m => m.Major.MajorString)</td>
+                <td>@Html.ActionLink("Request Edit", null, null, new { @class = "btn btn-primary btn-wide-medium loader-icon", id = "btn-edit-major" })</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.Rank)</td>
+                <td>@Html.DisplayFor(m => m.Rank.RankString)</td>
+                <td>@Html.ActionLink("Request Edit", null, null, new { @class = "btn btn-primary btn-wide-medium loader-icon", id = "btn-edit-rank" })</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade modal-lg" id="modal-teacher-name-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label for="edit-name">Enter name:&nbsp;</label>
+                <input name="edit-name" class="form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Change</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-teacher-dob-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label for="edit-name">Enter date of birth:&nbsp;</label>
+                <input type="date" name="edit-name" class="form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Change</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-teacher-major-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label for="edit-name">Enter new majors:&nbsp;</label>
+                <div id="major-placeholder">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Change</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-teacher-rank-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label for="edit-name">Enter new majors:&nbsp;</label>
+                <div id="rank-placeholder">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Change</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        "use strict";
+        @*var loaderImage = '<img src="@Url.Content("~/Content/img/progress2.gif")" class="img-btn-md" alt="..." />';
+        $('<td>' + loaderImage + '</td>').insertAfter('table td:last-child');*@
+
+        $('#btn-edit-name').click(function (event) {
+            $('#modal-teacher-name-edit').modal('show');
+            event.preventDefault();
+        });
+
+        $('#btn-edit-dob').click(function (event) {
+            $('#modal-teacher-dob-edit').modal('show');
+            event.preventDefault();
+        });
+
+        $('#btn-edit-major').click(function (event) {
+            $.ajax({
+                url: "/Teacher/_GetMajors",
+                dataType: "html",
+                type: "GET"
+            })
+                .always(function (xhr, status) {
+                    console.log("Always called");
+                    console.log("xhr: " + xhr);
+                    console.log("status: " + status);
+                })
+                .done(function (html) {
+                    console.log("done called")
+                    console.log("Received text: " + html);
+                    $('#major-placeholder').replaceWith(html);
+                    $('#modal-teacher-major-edit').modal('show');
+                })
+                .fail(function (xhr, status, error) {
+                    console.log("fail called");
+                    console.log("xhr: " + xhr);
+                    console.log("status: " + status);
+                    console.log("xhr: " + error);
+                });
+
+            event.preventDefault();
+        });
+
+        $('#btn-edit-rank').click(function (event) {
+            $.ajax({
+                url: "/Teacher/_GetRanks",
+                dataType: "html",
+                type: "GET"
+            })
+                .always(function (xhr, status) {
+                    console.log("Always called");
+                    console.log("xhr: " + xhr);
+                    console.log("status: " + status);
+                })
+                .done(function (html) {
+                    console.log("done called")
+                    console.log("Received text: " + html);
+                    $('#rank-placeholder').replaceWith(html);
+                    $('#modal-teacher-rank-edit').modal('show');
+                })
+                .fail(function (xhr, status, error) {
+                    console.log("fail called");
+                    console.log("xhr: " + xhr);
+                    console.log("status: " + status);
+                    console.log("xhr: " + error);
+                });
+
+            event.preventDefault();
+        });
+    </script>
+}
+

@@ -1,0 +1,172 @@
+﻿@model List<Assigner.Models.CoreEntities.BridgeEntities.StudentChosenProject>
+
+@{
+    ViewBag.Title = "ProjectList";
+}
+
+<h2>ProjectList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            Teacher Name
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Teacher.Name)
+            </td>
+            <td>
+                @Ajax.ActionLink("View Details", "_ProjectDetails", "Project", new { id = @item.ProjectID }, new AjaxOptions
+       {
+           HttpMethod = "GET",
+           UpdateTargetId = "content-project-details",
+           InsertionMode = InsertionMode.Replace,
+           //OnBegin = "viewOnBegin",
+           //OnComplete = "viewOnComplete",
+           OnFailure = "viewOnFailure",
+           OnSuccess = "viewOnSuccess",
+           LoadingElementId = $"details-load-indicator-{item.ID}"
+       })
+
+                <img id=@($"details-load-indicator-{item.ID}") class="img-circle" style="display:none;width:20px;height:20px" src="~/Content/img/progress2.gif" alt="loading..." />
+            </td>
+
+            <td>
+                @Ajax.ActionLink("Submit", "SubmitProject", "Submission", new { id = @item.ProjectID }, new AjaxOptions
+           {
+               HttpMethod = "POST",
+               UpdateTargetId = "content-project-details",
+               InsertionMode = InsertionMode.Replace,
+               OnBegin = "submitOnBegin",
+               OnComplete = "submitOnComplete",
+               OnFailure = "submitOnFailure",
+               OnSuccess = "submitOnSuccess"
+           })
+
+                <img id=@($"submit-load-indicator-{item.ID}") class="img-circle" style="display:none;width:20px;height:20px" src="~/Content/img/progress2.gif" alt="loading..." />
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div class="modal fade" id="modal-project-details">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="text-uppercase">PROJECT DETAILS</h4>
+            </div>
+            <div class="modal-body">
+                <div id="content-project-details">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-primary" onclick="prepareDelete(this)">
+                    Choose Project
+                </button>*@
+                <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-projectchoose-loader">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <img src="~/Content/img/progress2.gif" alt="Loading..." />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-projectchoose-success">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" class="close">&times;</button>
+                    <h4 class="text-primary">You have succesfully submitted a project</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@*<div class="modal fade" id="modal-projectchoose-success">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="text-primary">You have succesfully chosen a project</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@*<div class="modal fade" id="modal-projectchoose-failure">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="text-danger">Could not choose a project due to some error</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section Scripts
+{
+    <script>
+        function viewOnFailure() {
+            alert("view Request Failed");
+        }
+
+        function submitOnFailure() {
+            alert("submit Request Failed");
+        }
+
+        function viewOnSuccess() {
+            $('#modal-project-details').modal('show');
+        }
+
+
+
+        function submitOnSuccess() {
+            "use strict";
+
+            $('modal-projectchoose-success').modal('show');
+        }
+
+        function submitOnBegin() {
+            $('#modal-projectchoose-loader').modal('show');
+        }
+
+        function submitOnComplete() {
+            $('#modal-projectchoose-loader').modal('hide');
+        }
+    </script>
+}

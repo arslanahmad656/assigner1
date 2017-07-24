@@ -1,0 +1,26 @@
+﻿@model Assigner.Models.CoreEntities.Utils.Major
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Major</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Majors)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Majors)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

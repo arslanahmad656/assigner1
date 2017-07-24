@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .width20 {
+            width: 20%;
+        }
+        .width70 {
+            width: 70%;
+        }
+        .width10 {
+            width: 10%;
+        }
+
+        a.btn-wide-medium, button.btn-wide-medium {
+            display: inline-block;
+            width: 200px;
+        }
+
+        img.img-btn-md {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <div class="dropdown">
+                            <button style="line-height:2.4;" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                Home <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("All Users", "ListAll", "Account")</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button style="line-height:2.4;" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                Students <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Home", "Index", "Student")</li>
+                                <li>@Html.ActionLink("Create", "Create", "Student")</li>
+                                <li>@Html.ActionLink("View Profile", "Dashboard", "Student")</li>
+                                <li>@Html.ActionLink("View Available Projects", "ProjectList", "Student")</li>
+                                <li>@Html.ActionLink("View Chosen Projects", "ChosenProjectList", "Student")</li>
+                                <li>@Html.ActionLink("View Submitted Projects", "SubmittedProjectList", "Student")</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button style="line-height:2.4;" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                Teachers <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Teachers", "Index", "Teacher")</li>
+                                <li>@Html.ActionLink("Create", "Create", "Teacher")</li>
+                                <li>@Html.ActionLink("View Profile", "Dashboard", "Teacher")</li>
+                                <li>@Html.ActionLink("Create Project", "CreateProject", "Teacher")</li>
+                                <li>@Html.ActionLink("View Created Projects", "CreatedProjectList", "Teacher")</li>
+                                <li>@Html.ActionLink("View Submissions", "ViewSubmissions", "Teacher")</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button style="line-height:2.4;" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                Projects <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Home", "Index", "Project")</li>
+                                <li>@Html.ActionLink("Create", "Create", "Project")</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button style="line-height:2.4;" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                Miscs <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Majors", "Index", "Major")</li>
+                                <li>@Html.ActionLink("Student Ranks", "Index", "RankStudent")</li>
+                                <li>@Html.ActionLink("Teacher Ranks", "Index", "RankTeacher")</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown">
+                            <button style="line-height:2.4;" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">
+                                More <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("About", "About", "Home")</li>
+                                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/App/jquery.cookie.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

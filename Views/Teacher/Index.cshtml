@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Assigner.Models.CoreEntities.Teacher>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.Partial("_TeacherTable", Model)
+
+@section scripts {
+    <script src="~/Scripts/App/Scripts.js"></script>
+}

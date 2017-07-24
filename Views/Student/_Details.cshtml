@@ -1,0 +1,47 @@
+﻿@model Assigner.Models.CoreEntities.Student
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Major.MajorString)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Major.MajorString)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rank.RankString)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rank.RankString)
+        </dd>
+
+    </dl>
+</div>

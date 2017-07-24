@@ -1,0 +1,190 @@
+﻿@model IEnumerable<Assigner.Models.CoreEntities.Teacher>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table" id="table-main">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Major.MajorString)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rank.RankString)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Major.MajorString)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rank.RankString)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @*@Html.ActionLink("Delete", "Delete", new { id = item.ID })*@
+                    @Ajax.ActionLink("Delete", "_Details", new { id = @item.ID }, new AjaxOptions
+               {
+                   HttpMethod = "POST",
+                   UpdateTargetId = "content-teacher-details",
+                   InsertionMode = InsertionMode.Replace,
+                   OnBegin = "deleteOnBegin",
+                   OnComplete = "deleteOnComplete",
+                   OnFailure = "deleteOnFailure",
+                   OnSuccess = "deleteOnSuccess",
+                   LoadingElementId = $"details-load-indicator-{item.ID}"
+               }) 
+                    <img id=@($"details-load-indicator-{item.ID}") class="img-circle" style="display:none;width:20px;height:20px" src="~/Content/img/progress2.gif" alt="loading..." />
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@*<button id="modal-toggler" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-teacher-details" aria-hidden="true" data-val-display="none">Show dialog</button>*@
+
+<div class="modal fade" id="modal-teacher-details">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Delete confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Are you sure that you want to delete the record of the following teacher?
+                </p>
+                <p class="text-danger">
+                    <em>
+                        Warning! This action cannot be undone.
+                    </em>
+                </p>
+                <div id="content-teacher-details">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="prepareDelete(this)">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-teacher-delete-success">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="text-primary">The record has been deleted successfully</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="updateTable(this)">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-teacher-delete-failure">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" class="close">&times;</button>
+                <h4 class="text-danger">Could not delete the record</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function prepareDelete(btn) {
+        "use strict";
+
+        var img = '<img class="img-circle" style="width:40px;height:40px" src="@(Url.Content("~/Content/img/progress2.gif"))" alt="deleting..." />';
+        var removedBtn = $(btn).replaceWith(img);
+
+        var action = "teacher/DeleteTeacher/" + $("[data-id-teacher]").attr("data-id-teacher");
+
+        console.log("action: " + action);
+        $.ajax({
+            url: action,
+            type: "POST"
+        })
+            .always(function (xhr, status) {
+                console.log("Always called");
+                $('#modal-teacher-details').modal('hide');
+            })
+            .done(function (text) {
+                console.log("Received text: " + text);
+                $('#modal-teacher-delete-success').modal('show');
+            })
+            .fail(function (xhr, status, errorThrown) {
+                console.log("Error");
+                console.log("xhr: " + xhr);
+                console.log("status: " + status);
+                console.log("xhr: " + errorThrown);
+                $('#modal-teacher-delete-failure').modal('show');
+            })
+    }
+
+    function updateTable(btn) {
+        var progressImg = '<div class="text-center" id="table-main"><img class="img-circle text-center" style="width:100px;height:100px" src="@(Url.Content("~/Content/img/progress2.gif"))" alt="updating..." /></div>';
+
+        $('#table-main').replaceWith(progressImg);
+        $.ajax({
+            url: "teacher/_TeacherTableOnly",
+            type: "GET"
+        })
+            .always(function (xhr, status) {
+                console.log("Always called");
+            })
+            .done(function (html) {
+                console.log("Received text: " + html);
+                $('#table-main').replaceWith(html);
+            })
+            .fail(function (xhr, status, errorThrown) {
+                console.log("Error");
+                console.log("xhr: " + xhr);
+                console.log("status: " + status);
+                console.log("xhr: " + errorThrown);
+            })
+    }
+</script>
+
+@section scripts {
+    <script src="~/Scripts/App/Scripts.js">
+    </script>
+}

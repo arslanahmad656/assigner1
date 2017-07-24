@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Practice";
+}
+
+<h2>Practice</h2>
+
+<div id="random-rank">
+    @Ajax.ActionLink("Click to show a random rank", "RandomRank", new AjaxOptions
+{
+    HttpMethod = "GET",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "content-here",
+    OnBegin = "onRequestBegin",
+    OnComplete = "onRequestComplete",
+    OnSuccess = "onRequestSuccess",
+    OnFailure = "onRequestFailure"
+})
+</div>
+
+<div id="content-div">
+    @Ajax.ActionLink("Generate content", "SomeContent", new AjaxOptions
+{
+    HttpMethod = "GET",
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "content-div"
+})
+</div>
+
+<button type="button" onclick="toggleModal()">Show dialog programatically</button>
+
+<button id="toggler" type="button" data-toggle="modal" data-target="#modal">Show modal</button>
+
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>A modal!</h4>
+            </div>
+            <div class="modal-body">
+                <div id="content-here">
+                    content holder
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-content">
+
+</div>
+
+<script>
+    function toggleModal() {
+        var btn = document.getElementById("toggler");
+        btn.click();
+    }
+</script>
+
+@section scripts {
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/App/Scripts.js"></script>
+}
+
+<button type="button" onclick="createCookie()">Create cookie</button>
+@Html.ActionLink("Redirect to other page", "SeeCookie", "Home")
+
+<script>
+
+    function createCookie() {
+        Cookies.set("_name", "_uname_arslanahmad656");
+    }
+
+</script>

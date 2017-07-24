@@ -1,0 +1,66 @@
+﻿@model List<Assigner.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "ListAll";
+}
+
+<h2>ListAll</h2>
+
+@*<div class="panel-group">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <a href="#" data-toggle="collapse" data-target="#collapse-panel">Toggle Panel Collapse</a>
+            </div>
+        </div>
+        <div class="collapse panel-collapse in" id="collapse-panel">
+            <div class="panel-body">
+                The body of the panel
+            </div>
+            <div class="panel-footer">
+                The footer
+            </div>
+        </div>
+    </div>
+</div>*@
+@{ int userCount = 0; }
+@foreach (var user in Model)
+{
+    userCount++;
+    <div class="panel-group">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <a href="#" data-toggle="collapse" data-target="#user-count-@userCount">User# @userCount</a>
+                </div>
+            </div>
+            <div class="collapse panel-collapse" id="user-count-@userCount">
+
+                <div>
+                    
+                    @Html.Partial("_ListSingle", user)
+
+                    <p>
+                        @Html.ActionLink("Back", "Index", "Home")
+                    </p>
+                    <hr />
+                </div>  @*End div containing d;*@
+
+            </div> @*End .panel-collapse*@
+        </div> @*End panel-danger*@
+    </div> @*End panel-group*@
+
+    <br /><br />
+}
+
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        Dropdown Example
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="#">HTML</a></li>
+        <li><a href="#">CSS</a></li>
+        <li><a href="#">JavaScript</a></li>
+    </ul>
+</div>
