@@ -1,0 +1,176 @@
+﻿@model Assigner.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<style>
+    form .control-label, h2, h4 {
+        color: white;
+    }
+</style>
+
+<h2 class="role-view">Register yourself</h2>
+
+<div class="jumbotron card-register" style="background-color: #0f3369; padding-top: 200px;">
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", style = "margin-left:50px"}))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Create a new account</h4>
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label for="Role" class="control-label col-md-2">Role</label>
+            <div class="col-md-10">
+                <select name="Role" class="form-control">
+                    <option value="student" selected>Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", focus = "focus" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MajorID, "MajorID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("MajorID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MajorID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.RankID, "RankID", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("RankID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RankID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+        @Html.Partial("_GetDropDown")
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                <p class="text-danger sr-only">This username has already been taken</p>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <input type="hidden" name="role_id" value="student" />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Register" />
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="rank-change-loading-indictor-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="~/Content/img/progress2.gif" alt="Loading..." />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rank-change-error-indicator">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="text-danger">Server Error</p>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger">
+                    Failed to load the data required to display. Please reload the page and try again.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $('select[name="Role"]').val("student");
+        $('input[name="role_id"]').val("student")
+
+        $('select[name="Role"]').change(function () {
+            var dropDown = $(this);
+            var inputBox = $('input[name="role_id"]');
+
+            console.log("Role changed");
+            console.log("Dropdown value: " + dropDown.val());
+            console.log("Input value: " + inputBox.val());
+
+            $(inputBox).val(dropDown.val());
+
+            $.ajax({
+                url: "_GetDropDown",
+                data: { dropDownFor: inputBox.val() },
+                type: "GET",
+                beforeSend: function () {
+                    $('#rank-change-loading-indictor-dialog').modal('show');
+                }
+            })
+                .always(function (xhr, status) {
+                    console.log("always executed.");
+                    console.log("xhr: " + xhr);
+                    console.log("status: " + status);
+                })
+                .done(function (html) {
+                    console.log("done executed.");
+                    console.log("html: " + html);
+                    $('div#form-group-rank').replaceWith(html);
+                    if (inputBox.val() === "student") {
+                        $('.role-view').html("Student Registrtion")
+                    } else {
+                        $('.role-view').html("Teacher Registrtion")
+                    }
+                    $('#rank-change-loading-indictor-dialog').modal('hide');
+                })
+                .fail(function (xhr, status, errorThrown) {
+                    console.log("fail executed.");
+                    console.log("xhr: " + xhr);
+                    console.log("errorThrown: " + errorThrown);
+                    $('#rank-change-loading-indictor-dialog').modal('hide');
+                    $('#rank-change-error-indicator').modal('show');
+                });
+        });
+    </script>
+}
+
+

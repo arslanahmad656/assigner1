@@ -257,8 +257,16 @@
     <Content Include="Content\bootstrap-lumen.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\admin1.png" />
+    <Content Include="Content\img\login1.png" />
+    <Content Include="Content\img\management1.png" />
     <Content Include="Content\img\progress1.gif" />
     <Content Include="Content\img\progress2.gif" />
+    <Content Include="Content\img\project1.png" />
+    <Content Include="Content\img\register.png" />
+    <Content Include="Content\img\student1.png" />
+    <Content Include="Content\img\teacher1.png" />
+    <Content Include="Content\img\wall.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -383,6 +391,10 @@
     <Content Include="Views\Project\_ProjectDetails.cshtml" />
     <Content Include="Views\Student\ChosenProjectList.cshtml" />
     <Content Include="Views\Submission\SubmittedProjectsByStudentId.cshtml" />
+    <Content Include="Views\Home\_GetDropDown.cshtml" />
+    <Content Include="Views\Home\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

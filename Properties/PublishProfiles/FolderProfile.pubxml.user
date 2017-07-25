@@ -515,7 +515,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/25/2017 00:16:24</publishTime>
     </File>
     <File Include="Properties/PublishProfiles/FolderProfile.pubxml.user">
-      <publishTime>07/25/2017 00:43:10</publishTime>
+      <publishTime>07/25/2017 00:45:46</publishTime>
     </File>
     <File Include="roslyn/csc.exe">
       <publishTime>06/27/2016 14:50:24</publishTime>

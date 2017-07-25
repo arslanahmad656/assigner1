@@ -1,14 +1,11 @@
 ﻿@model List<Assigner.Models.CoreEntities.Project>
 
 @{
-    ViewBag.Title = "ProjectList";
+    ViewBag.Title = "Available Projects";
 }
 
-<h2>ProjectList</h2>
+<h2>Projects for your rank (@Model[0].Rank.RankString)</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>

@@ -146,7 +146,7 @@ namespace Assigner.Controllers
         public ActionResult Register()
         {
             ViewBag.MajorID = new SelectList(db.Majors, "ID", "MajorString");
-            if((Request.Form["role_id"] == null) || (Request.Form["role_id"].ToLower().Equals("student")))
+            if ((Request.Form["role_id"] == null) || (Request.Form["role_id"].ToLower().Equals("student")))
             {
                 ViewBag.RankID = new SelectList(db.RankStudents, "ID", "RankString");
             }
